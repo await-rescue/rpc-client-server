@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  server:
+    build: ./server
+    ports: 
+        - "8001:8001"
+  client:
+    build: ./client
+    ports: 
+        - "9001:9001"
