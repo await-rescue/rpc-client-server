@@ -8,9 +8,14 @@ import (
 	"time"
 )
 
-// Numbers represents RPC args
-type Numbers struct {
+// NumbersArgs represents RPC args
+type NumbersArgs struct {
 	A, B int
+}
+
+// NumbersReply represents an RPC reply
+type NumbersReply struct {
+	Result int
 }
 
 func main() {
@@ -22,19 +27,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var reply int
+	reply := new(NumbersReply)
 
 	for {
-		time.Sleep(time.Millisecond * 100)
-		args := Numbers{rand.Intn(50), rand.Intn(50)}
+		time.Sleep(time.Millisecond * 1000)
+		args := NumbersArgs{rand.Intn(50), rand.Intn(50)}
 
 		fmt.Println(fmt.Sprintf("Calling AddNumbers with %d and %d", args.A, args.B))
 
-		err = client.Call("RPCServer.AddNumbers", args, &reply)
+		err = client.Call("NumbersService.AddNumbers", &args, reply)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		fmt.Println(fmt.Sprintf("response: %d", reply))
+		fmt.Println(fmt.Sprintf("response: %d", reply.Result))
 	}
 }

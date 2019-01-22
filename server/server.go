@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	server := new(RPCServer)
+	server := new(NumbersService)
 	rpc.Register(server)
 	rpc.HandleHTTP()
 
