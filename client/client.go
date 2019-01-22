@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"net/rpc"
+	"net"
+	"net/rpc/jsonrpc"
 	"time"
 )
 
@@ -20,26 +21,26 @@ type NumbersReply struct {
 
 func main() {
 	fmt.Println("waiting for server")
-	time.Sleep(time.Second * 5)
-	fmt.Println("client up")
-	client, err := rpc.DialHTTP("tcp", "server:8001")
-	if err != nil {
-		log.Fatal(err)
-	}
+	time.Sleep(time.Second * 2)
 
-	reply := new(NumbersReply)
+	conn, err := net.Dial("tcp", "server:8001")
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()
+
+	client := jsonrpc.NewClient(conn)
 
 	for {
-		time.Sleep(time.Millisecond * 1000)
 		args := NumbersArgs{rand.Intn(50), rand.Intn(50)}
+		reply := new(NumbersReply)
 
-		fmt.Println(fmt.Sprintf("Calling AddNumbers with %d and %d", args.A, args.B))
-
-		err = client.Call("NumbersService.AddNumbers", &args, reply)
+		err = client.Call("NumbersService.AddNumbers", args, reply)
 		if err != nil {
-			log.Println(err)
-			continue
+			panic(err)
 		}
-		fmt.Println(fmt.Sprintf("response: %d", reply.Result))
+
+		log.Println(reply.Result)
+		time.Sleep(time.Millisecond * 1000)
 	}
 }

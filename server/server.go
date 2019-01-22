@@ -1,17 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
+	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 func main() {
-	server := new(NumbersService)
-	rpc.Register(server)
-	rpc.HandleHTTP()
+	numbers := new(NumbersService)
 
-	fmt.Println("server up")
-	log.Fatal(http.ListenAndServe(":8001", nil))
+	server := rpc.NewServer()
+	server.Register(numbers)
+
+	listener, err := net.Listen("tcp", ":8001")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("server up")
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		go server.ServeCodec(jsonrpc.NewServerCodec(conn))
+	}
 }
