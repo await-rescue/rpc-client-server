@@ -2,8 +2,6 @@ package main
 
 import "errors"
 
-// TODO: use JSON-RPC https://www.jsonrpc.org/specification
-
 // NumbersArgs represents RPC args
 type NumbersArgs struct {
 	A, B int

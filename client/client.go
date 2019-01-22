@@ -41,7 +41,7 @@ func main() {
 		"NumbersService.DivideNumbers")
 
 	for {
-		time.Sleep(time.Millisecond * 1000)
+		time.Sleep(time.Millisecond * 500)
 
 		args := NumbersArgs{rand.Intn(5), rand.Intn(5)}
 		reply := new(NumbersReply)
