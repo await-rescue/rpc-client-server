@@ -11,7 +11,7 @@ type NumbersArgs struct {
 
 // NumbersReply represents an RPC reply
 type NumbersReply struct {
-	Result int
+	Result float32
 }
 
 // NumbersService serves RPC methods
@@ -19,13 +19,13 @@ type NumbersService struct{}
 
 // AddNumbers Adds two numbers
 func (ns *NumbersService) AddNumbers(args *NumbersArgs, reply *NumbersReply) error {
-	reply.Result = args.A + args.B
+	reply.Result = float32(args.A) + float32(args.B)
 	return nil
 }
 
 // MultiplyNumbers multiplies two numbers
 func (ns *NumbersService) MultiplyNumbers(args *NumbersArgs, reply *NumbersReply) error {
-	reply.Result = args.A * args.B
+	reply.Result = float32(args.A) * float32(args.B)
 	return nil
 }
 
@@ -34,6 +34,6 @@ func (ns *NumbersService) DivideNumbers(args *NumbersArgs, reply *NumbersReply) 
 	if args.B == 0 {
 		return errors.New("Cannot divide by zero")
 	}
-	reply.Result = args.A / args.B
+	reply.Result = float32(args.A) / float32(args.B)
 	return nil
 }

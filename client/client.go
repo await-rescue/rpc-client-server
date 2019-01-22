@@ -18,7 +18,7 @@ type NumbersArgs struct {
 
 // NumbersReply represents an RPC reply
 type NumbersReply struct {
-	Result int
+	Result float32
 }
 
 func main() {
