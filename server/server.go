@@ -18,14 +18,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println("server up")
-
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
 			log.Fatal(err)
 		}
-
+		log.Println("Server up")
 		go server.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
 }

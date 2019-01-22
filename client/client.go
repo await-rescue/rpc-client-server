@@ -22,7 +22,7 @@ type NumbersReply struct {
 }
 
 func main() {
-	fmt.Println("waiting for server")
+	fmt.Println("Waiting for server")
 	time.Sleep(time.Second * 2)
 
 	conn, err := net.Dial("tcp", "server:8001")
@@ -32,20 +32,31 @@ func main() {
 	defer conn.Close()
 
 	jsonCodec := jsonrpc.NewClientCodec(conn)
-
 	client := rpc.NewClientWithCodec(jsonCodec)
 
+	methods := make([]string, 0)
+	methods = append(methods,
+		"NumbersService.AddNumbers",
+		"NumbersService.MultiplyNumbers",
+		"NumbersService.DivideNumbers")
+
 	for {
-		args := NumbersArgs{rand.Intn(50), rand.Intn(50)}
+		time.Sleep(time.Millisecond * 1000)
+
+		args := NumbersArgs{rand.Intn(5), rand.Intn(5)}
 		reply := new(NumbersReply)
 
-		err = client.Call("NumbersService.AddNumbers", args, reply)
+		rand.Seed(time.Now().Unix())
+		method := methods[rand.Intn(len(methods))]
+
+		log.Printf("Calling %s with params %d and %d", method, args.A, args.B)
+		err = client.Call(method, args, reply)
 		if err != nil {
-			log.Println(err)
+			log.Println(fmt.Sprintf("ERROR: %s", err))
+			continue
 		}
 
 		res, _ := json.Marshal(reply)
-		fmt.Println(string(res))
-		time.Sleep(time.Millisecond * 1000)
+		log.Println(fmt.Sprintf("Response received: %s", string(res)))
 	}
 }
