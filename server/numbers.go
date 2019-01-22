@@ -1,5 +1,7 @@
 package main
 
+import "errors"
+
 // TODO: use JSON-RPC https://www.jsonrpc.org/specification
 
 // NumbersArgs represents RPC args
@@ -17,6 +19,7 @@ type NumbersService struct{}
 
 // AddNumbers Adds two numbers
 func (ns *NumbersService) AddNumbers(args *NumbersArgs, reply *NumbersReply) error {
+	return (errors.New("test error"))
 	reply.Result = args.A + args.B
 	return nil
 }
