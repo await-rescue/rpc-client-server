@@ -27,7 +27,7 @@ func (ns *NumbersService) MultiplyNumbers(args *NumbersArgs, reply *NumbersReply
 	return nil
 }
 
-// DivideNumbers multiplies two numbers
+// DivideNumbers divided two numbers
 func (ns *NumbersService) DivideNumbers(args *NumbersArgs, reply *NumbersReply) error {
 	if args.B == 0 {
 		return errors.New("Cannot divide by zero")
